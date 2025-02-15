@@ -16,4 +16,9 @@ public class Eurovision {
             this.cancion = cancion;
         }
 
+    @Override
+    public String toString() {
+        return nombre ;
+    }
+
 }

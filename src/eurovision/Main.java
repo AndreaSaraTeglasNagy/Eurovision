@@ -47,28 +47,50 @@ public class Main {
                 Eurovision elegido = posiblesVotos.get(i);
                 int puntosDados = puntos.get(i);
                 elegido.puntuacionTotal += puntosDados;
-                elegido.votosRecibidos.put(pais.nombre, puntosDados);
+                elegido.votosRecibidos.put(pais.nombre,puntosDados);
+            }
+
+        }
+
+        Collections.sort(eurovision, new Comparator<Eurovision>() {
+            @Override
+            public int compare(Eurovision e1, Eurovision e2) {
+                return e1.nombre.compareTo(e2.nombre);
+            }
+        });
+
+        System.out.println("Listado de los paises por orden alfabético:");
+        for (Eurovision pais : eurovision) {
+            System.out.println(pais.nombre);
+        }
+
+        System.out.println("\nPaíses ordenados alfabéticamente con votaciones:");
+        for (Eurovision pais : eurovision) {
+            System.out.println(pais + "- " + pais.grupo + " - " + pais.cancion);
+            List<Map.Entry<String,Integer>> votosOrdenados = new ArrayList<>(pais.votosRecibidos.entrySet());
+            votosOrdenados.sort(new Comparator<Map.Entry<String, Integer>>() {
+                @Override
+                public int compare(Map.Entry<String, Integer> o1, Map.Entry<String, Integer> o2) {
+                    return o2.getValue().compareTo(o1.getValue());
+                }
+            });
+
+            for (Map.Entry<String, Integer> voto : votosOrdenados) {
+                System.out.println(" " + voto.getKey() + " le dio " + voto.getValue() + " puntos");
             }
         }
 
+        Collections.sort(eurovision,new Comparator<Eurovision>() {
+            @Override
+            public int compare(Eurovision o1, Eurovision o2) {
+                return o2.puntuacionTotal - o1.puntuacionTotal;
+            }
+        });
 
-        eurovision.sort(Comparator.comparing(eurovision1 -> eurovision1.nombre));
-        System.out.println("Listado de los paises por orden afabético: ");
-        for (Eurovision p : eurovision) System.out.println(p.nombre );
-
-        eurovision.sort(Comparator.comparing(p -> p.nombre));
-        System.out.println("\nPaíses ordenados alfabéticamente con votaciones:");
-        for (Eurovision p : eurovision) {
-            System.out.println(p.nombre + " - " + p.grupo + " - " + p.cancion);
-            p.votosRecibidos.entrySet().stream()
-                    .sorted((paisA, paisB) -> paisB.getValue().compareTo(paisA.getValue()))
-                    .forEach(pais -> System.out.println("  " + pais.getKey() + " le dio " + pais.getValue() + " puntos"));
-
-        }
-
-        eurovision.sort((p1, p2) -> Integer.compare(p2.puntuacionTotal, p1.puntuacionTotal));
         System.out.println("\nRanking por puntuaciones recibidas:");
-        for (Eurovision p : eurovision) System.out.println(p.nombre + ": " + p.puntuacionTotal + " puntos");
+        for (Eurovision pais : eurovision) {
+            System.out.println(pais.nombre + ": " + pais.puntuacionTotal + " puntos" );
+        }
 
         Eurovision ganador = eurovision.get(0);
         System.out.println("\nGanador: " + ganador.nombre + " con " + ganador.puntuacionTotal + " puntos");
@@ -78,27 +100,14 @@ public class Main {
         }
 
         List<String> cancionesOrdenadas = new ArrayList<>();
-        for (Eurovision p : eurovision) cancionesOrdenadas.add(p.cancion);
-        Collections.sort(cancionesOrdenadas);
-        System.out.println("\nListado de canciones ordenadas:");
-        for (String c : cancionesOrdenadas) System.out.println(c);
-
-        int max12 = 0;
-        Eurovision max12Pais = null;
-        for (Eurovision p : eurovision) {
-            int count12 = (int) p.votosRecibidos.values().stream().filter(v -> v == 12).count();
-            if (count12 > max12) {
-                max12 = count12;
-                max12Pais = p;
-            }
+        for (Eurovision pais : eurovision) {
+            cancionesOrdenadas.add(pais.cancion);
         }
 
-        if (max12Pais != null) {
-            System.out.println("\nPaís con más puntuaciones de 12 puntos: " + max12Pais.nombre);
-            System.out.println("Recibió 12 puntos de:");
-            for (Map.Entry<String, Integer> entry : max12Pais.votosRecibidos.entrySet()) {
-                if (entry.getValue() == 12) System.out.println(entry.getKey());
-            }
+        Collections.sort(cancionesOrdenadas);
+        System.out.println("\nListado de canciones ordenadas:");
+        for (String cancion : cancionesOrdenadas) {
+            System.out.println(cancion);
         }
 
 
