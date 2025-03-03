@@ -78,6 +78,7 @@ public class Main {
             for (Map.Entry<String, Integer> voto : votosOrdenados) {
                 System.out.println(" " + voto.getKey() + " le dio " + voto.getValue() + " puntos");
             }
+            System.out.println();
         }
 
         Collections.sort(eurovision,new Comparator<Eurovision>() {
